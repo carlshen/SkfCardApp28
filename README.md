@@ -1,4 +1,4 @@
-# SkfCardApp
+# SkfCardApp28
 
 This is the SKF SIM card application to example the SKF library.
 
@@ -12,6 +12,8 @@ Next is the develop environment:
 
 4 Current supportted 4 interfaces:
 
+  SkfInterface.getSkfInstance().SKF_Exist(getApplicationContext()) // check super sd exist, return true for exist, false for not exist;
+
   SkfInterface.getSkfInstance().SKF_EnumDev(getApplicationContext()); // enum device and init environment, return "device" for connection;
   
   SkfInterface.getSkfInstance().SKF_ConnectDev("device"); // Connect Device by parameter "device", return true for success, false for failure;
@@ -21,7 +23,7 @@ Next is the develop environment:
   SkfInterface.getSkfInstance().SKF_DisconnectDev("device"); // Disconnect Device by parameter "device", return true for success, false for failure;
   
 
-5 Sdk is CardEmulation-1.0.0.aar file, please create libs directory in project, and place the CardEmulation-1.0.0.aar library in the libs directory;
+5 Sdk is CardEmulation-1.0.1.aar file, please create libs directory in project, and place the CardEmulation-1.0.1.aar library in the libs directory;
 
   Add next in project build.gradle file: 
   
@@ -37,7 +39,7 @@ repositories {
 
 dependencies {
 
-    compile (name:'CardEmulation-1.0.0', ext:'aar')
+    compile (name:'CardEmulation-1.0.1', ext:'aar')
 	
 }
 
