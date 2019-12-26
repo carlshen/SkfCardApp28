@@ -1,6 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    Properties properties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    properties.load(inputStream)
+    def sdkDir = properties.getProperty('key.file')
+    def keyfile =file(sdkDir)
+    def key_keyAlias = properties.getProperty('keyAlias')
+    def key_keyPassword = properties.getProperty('keyPassword')
+    def key_storePassword = properties.getProperty('storePassword')
+
+    signingConfigs {
+        debug {
+            storeFile keyfile
+            storePassword key_storePassword
+            keyAlias key_keyAlias
+            keyPassword key_keyPassword
+        }
+        release {
+            storeFile keyfile
+            storePassword key_storePassword
+            keyAlias key_keyAlias
+            keyPassword key_keyPassword
+        }
+    }
+
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
@@ -12,6 +37,14 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            debuggable true
+            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -28,5 +61,5 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation (name:'CardEmulation-1.1.0', ext:'aar')
+    implementation (name:'CardEmulation-1.2.0', ext:'aar')
 }
