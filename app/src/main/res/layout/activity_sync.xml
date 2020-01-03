@@ -126,6 +126,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
         <Button
+            android:id="@+id/btn_checkkey"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CheckKey" />
+        <Button
+            android:id="@+id/btn_getkey"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GetKey" />
+        <Button
             android:id="@+id/btn_ecckey"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -144,30 +156,6 @@
             android:layout_weight="1"
             android:text="ECCVerify" />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <Button
-            android:id="@+id/btn_checkkey"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="CheckKey" />
-        <Button
-            android:id="@+id/btn_getkey"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="GetKey" />
-        <Button
-            android:id="@+id/btn_syncdemo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="GotoSyncDemo" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tv_result"
         android:layout_width="match_parent"

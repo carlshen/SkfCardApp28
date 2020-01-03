@@ -10,4 +10,5 @@
     <string name="btn_connect_device">Connect</string>
     <string name="btn_info_device">DeviceInfo</string>
     <string name="btn_disconnect_device">Disconnect</string>
+    <string name="large_payload">DTU Orientation</string>
 </resources>

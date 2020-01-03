@@ -6,28 +6,28 @@ Next is the develop environment:
 
 1 java jdk8;
 
-2 Android Studio 3.4.0(above);
+2 Android Studio 3.2.0(above);
 
 3 Android sdk 28;(ndk not used);
 
-4 Current SDK supportted 20 interfaces, which use asynchronous callback:
-  
-  Please use SkfInterface.getSkfInstance().SKF_SetCallback() to set the SkfCallback before you call any function, otherwise you can't get any feedback;  
+4 Current SDK supportted 21 interfaces. The first solution uses asynchronous callback:
+
+  Please use SkfInterface.getSkfInstance().SKF_SetCallback(SkfCallback) to set the Callback before you call any function, otherwise you can't get any feedback;  
 
   1) SkfInterface.getSkfInstance().SKF_EnumDev(getApplicationContext()); // enum device and init environment, return "device" for connection;
-  
+
      Callback function is onEnumDev(String result);
 
 	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the device; other value is failure；
-  
+
   2) SkfInterface.getSkfInstance().SKF_ConnectDev("device"); // Connect Device by parameter "device";
   
      Callback function is onConnectDev(String result);
 
 	 return Json format string, code: 0 is ok; other value is failure；
-  
+
   3) SkfInterface.getSkfInstance().SKF_GetDevInfo("device"); // Get Device Info by parameter "device";
-  
+
      Callback function is onGetDevInfo(String result);
 
 	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the device info data; other value is failure；
@@ -63,8 +63,16 @@ Next is the develop environment:
      Callback function is onSetSymmKey(String result);
 	 
 	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the key handle, which be used in following steps；other value is failure；
-	 
-  9）SkfInterface.getSkfInstance().SKF_CheckSymmKey(String device)； // check the key set status;
+
+  9）SkfInterface.getSkfInstance().SKF_GetSymmKey(String device, int AlgID)； // get encrypt key handle;
+
+     input device parameter "device", algorithm parameter "AlgID"(1025 is ECB algorithm， 1026 is CBC algorithm, others not supported);
+
+     Callback function is onGetSymmKey(String result);
+
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the key handle, which be used in following steps；other value is failure；
+
+  10）SkfInterface.getSkfInstance().SKF_CheckSymmKey(String device)； // check the key set status;
 
      input device parameter "device";
 
@@ -72,7 +80,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok, the cipher key is set; other value is failure, the key is not set yet;
 
- 10）SkfInterface.getSkfInstance().SKF_EncryptInit(String key)；       // encrypt init
+ 11）SkfInterface.getSkfInstance().SKF_EncryptInit(String key)；       // encrypt init
 
      input encrypt key parameter "key"(128bit, or 16 bytes string);
 
@@ -80,7 +88,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
- 11）SkfInterface.getSkfInstance().SKF_Encrypt(String key, String data)；  // encrypt data
+ 12）SkfInterface.getSkfInstance().SKF_Encrypt(String key, String data)；  // encrypt data
 
      input encrypt key parameter "key"(128bit, or 16 bytes string), encrypt data;
   
@@ -88,7 +96,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the encrypt result；; other value is failure；
 
- 12）SkfInterface.getSkfInstance().SKF_DecryptInit(String key)；    // decrypt init
+ 13）SkfInterface.getSkfInstance().SKF_DecryptInit(String key)；    // decrypt init
 
      input encrypt key parameter "key"(128bit, or 16 bytes string);
 
@@ -96,7 +104,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
- 13）SkfInterface.getSkfInstance().SKF_Decrypt(String key, String data)； // decrypt data
+ 14）SkfInterface.getSkfInstance().SKF_Decrypt(String key, String data)； // decrypt data
 
      input decrypt key parameter "key"(128bit, or 16 bytes string), decrypt data;
   
@@ -104,7 +112,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the decrypt result; other value is failure；
 
- 14）SkfInterface.getSkfInstance().SKF_EncryptFile(String key, File inputFile, File outputFile)；// file encrypt data
+ 15）SkfInterface.getSkfInstance().SKF_EncryptFile(String key, File inputFile, File outputFile)；// file encrypt data
 
      input encrypt key parameter "key"(128bit, or 16 bytes string), encrypt input file, encrypt result file;
 
@@ -114,7 +122,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok, outputFile is the encrypt result file；
 
- 15）SkfInterface.getSkfInstance().SKF_DecryptFile(String key, File inputFile, File outputFile)；// file decrypt data
+ 16）SkfInterface.getSkfInstance().SKF_DecryptFile(String key, File inputFile, File outputFile)；// file decrypt data
 
      input decrypt key parameter "key"(128bit, or 16 bytes string), decrypt input file, decrypt result file;
 
@@ -124,7 +132,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok, outputFile is the decrypt result file；
 
- 16）SkfInterface.getSkfInstance().SKF_DigestInit(String device)；  // digest init
+ 17）SkfInterface.getSkfInstance().SKF_DigestInit(String device)；  // digest init
 
      input device parameter "device";
 
@@ -132,7 +140,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok.
 
- 17）SkfInterface.getSkfInstance().SKF_Digest(String data);
+ 18）SkfInterface.getSkfInstance().SKF_Digest(String data);
 
      input device parameter "device", the digest data;
 
@@ -140,7 +148,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the digest result.
 
- 18）SkfInterface.getSkfInstance().SKF_GenECCKeyPair(String device);
+ 19）SkfInterface.getSkfInstance().SKF_GenECCKeyPair(String device);
 
      input device parameter "device";
 
@@ -148,7 +156,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the 64 byte public Key.
 
- 19）SkfInterface.getSkfInstance().SKF_ECCSignData(String key, String data);
+ 20）SkfInterface.getSkfInstance().SKF_ECCSignData(String key, String data);
 
      input key parameter "key" from 18), and the signature data;
 
@@ -156,7 +164,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the signature data result.
 
- 20）SkfInterface.getSkfInstance().SKF_ECCVerify(String key, String sign, String data);
+ 21）SkfInterface.getSkfInstance().SKF_ECCVerify(String key, String sign, String data);
 
      input parameter Key, signature from above, and the verify data;
 
@@ -192,30 +200,159 @@ Next is the develop environment:
 	SkfInterface.getSkfInstance().setDebugFlag(true/false) can set SDK log flag, which is usefule for debug.
 
 
-5 Sdk is CardEmulation-1.2.0.aar file, please create libs directory in project, and place the CardEmulation-1.2.0.aar library in the libs directory;
+5 Current SDK supportted 21 interfaces. The second solution mainly uses synchronous callback, while SKF_EnumDev/SKF_EncryptFile/SKF_DecryptFile need asynchronous callback:
+
+  Please use SkfSyncInterface.getSkfSyncInstance().SKF_SetSyncCallback(SkfSyncCallback) to set the Callback, otherwise you can't enum the device for the following steps;  
+
+  1) SkfSyncInterface.getSkfSyncInstance().SKF_EnumDev(getApplicationContext()); // enum device and init environment, return "device" for connection;
+
+     Callback function is onEnumDev(String result);
+
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the device; other value is failure；
+
+  2) String result = SkfSyncInterface.getSkfSyncInstance().SKF_ConnectDev("device"); // Connect Device by parameter "device";
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+  3) String result = SkfSyncInterface.getSkfSyncInstance().SKF_GetDevInfo("device"); // Get Device Info by parameter "device";
+
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the device info data; other value is failure；
+  
+  4) String result = SkfSyncInterface.getSkfSyncInstance().SKF_DisconnectDev("device"); // Disconnect Device by parameter "device";
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+  5）String result = SkfSyncInterface.getSkfSyncInstance().SKF_CreateApplication("device")； // no need called, as default created;
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+  6）String result = SkfSyncInterface.getSkfSyncInstance().SKF_OpenApplication("device")； // no need called, as default opened;
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+  7）String result = SkfSyncInterface.getSkfSyncInstance().SKF_CreateContainer("device")； // no need called, as default created;
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+  8）String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(String device, String key, int AlgID)； // set encrypt key and algorithm;
+
+     input device parameter "device", encrypt key parameter "key"(128bit, or 16 bytes string), algorithm parameter "AlgID"(1025 is ECB algorithm， 1026 is CBC algorithm, others not supported);
+	 
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the key handle, which be used in following steps；other value is failure；
+
+  9）String result = SkfSyncInterface.getSkfSyncInstance().SKF_GetSymmKey(String device, int AlgID)； // get encrypt key handle;
+
+     input device parameter "device", algorithm parameter "AlgID"(1025 is ECB algorithm， 1026 is CBC algorithm, others not supported);
+
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the key handle, which be used in following steps；other value is failure；
+
+  10）String result = SkfSyncInterface.getSkfSyncInstance().SKF_CheckSymmKey(String device)； // check the key set status;
+
+     input device parameter "device";
+
+	 return Json format string, code: 0 is ok, the cipher key is set; other value is failure, the key is not set yet;
+
+ 11）String result = SkfSyncInterface.getSkfSyncInstance().SKF_EncryptInit(String key)；       // encrypt init
+
+     input encrypt key parameter "key"(128bit, or 16 bytes string);
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+ 12）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(String key, String data)；  // encrypt data
+
+     input encrypt key parameter "key"(128bit, or 16 bytes string), encrypt data;
+
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the encrypt result；; other value is failure；
+
+ 13）String result = SkfSyncInterface.getSkfSyncInstance().SKF_DecryptInit(String key)；    // decrypt init
+
+     input encrypt key parameter "key"(128bit, or 16 bytes string);
+
+	 return Json format string, code: 0 is ok; other value is failure；
+
+ 14）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(String key, String data)； // decrypt data
+
+     input decrypt key parameter "key"(128bit, or 16 bytes string), decrypt data;
+
+	 return Json format string, code: 0 is ok, data: "xxxxxxx" is the decrypt result; other value is failure；
+
+ 15）SkfSyncInterface.getSkfSyncInstance().SKF_EncryptFile(String key, File inputFile, File outputFile)；// file encrypt data
+
+     input encrypt key parameter "key"(128bit, or 16 bytes string), encrypt input file, encrypt result file;
+
+     Note: please put this function in sub-thread, as this will be take a long time.
+  
+     Callback function is onEncryptFile(String result);
+
+	 return Json format string, code: 0 is ok, outputFile is the encrypt result file；
+
+ 16）SkfSyncInterface.getSkfSyncInstance().SKF_DecryptFile(String key, File inputFile, File outputFile)；// file decrypt data
+
+     input decrypt key parameter "key"(128bit, or 16 bytes string), decrypt input file, decrypt result file;
+
+     Note: please put this function in sub-thread, as this will be take a long time.
+
+     Callback function is onDecryptFile(String result);
+
+	 return Json format string, code: 0 is ok, outputFile is the decrypt result file；
+
+ 17）String result = SkfSyncInterface.getSkfSyncInstance().SKF_DigestInit(String device)；  // digest init
+
+     input device parameter "device";
+
+	 return Json format string, code: 0 is ok.
+
+ 18）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(String data);
+
+     input device parameter "device", the digest data;
+
+	 return Json format string, code: 0 is ok; data："xxxx" is the digest result.
+
+ 19）String result = SkfSyncInterface.getSkfSyncInstance().SKF_GenECCKeyPair(String device);
+
+     input device parameter "device";
+
+	 return Json format string, code: 0 is ok; data："xxxx" is the 64 byte public Key.
+
+ 20）String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(String key, String data);
+
+     input key parameter "key" from 18), and the signature data;
+
+	 return Json format string, code: 0 is ok; data："xxxx" is the signature data result.
+
+ 21）String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(String key, String sign, String data);
+
+     input parameter Key, signature from above, and the verify data;
+
+	 return Json format string, code: 0 is verify ok, other value is verify fail.
+
+    Note: The return result is Json format string, please refer former explaination for detail.
+
+
+6 Sdk is CardEmulation-1.3.0.aar file, please create libs directory in project, and place the CardEmulation-1.3.0.aar library in the libs directory;
 
   Add next in project build.gradle file: 
-  
+
 repositories {
 
     flatDir {
 	
         dirs 'libs'
-		
+
     }
 
 }
 
 dependencies {
 
-    compile (name:'CardEmulation-1.2.0', ext:'aar')
+    compile (name:'CardEmulation-1.3.0', ext:'aar')
 
 }
 
-6 Please refer the example project: https://github.com/carlshen/SkfCardApp28
+7 Please refer the example project: https://github.com/carlshen/SkfCardApp28
 
     EncryptUtil.java file has the example for generating cipher key, please refer the example for detail.
 
 
-7 Any question, please contact me.
+8 Any question, please contact me.
 
