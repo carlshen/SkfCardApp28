@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.tongxin.cardetest.SyncActivity"
+        <activity android:name="com.tongxin.skfcard.SyncActivity"
             android:theme="@style/AppTheme">
         </activity>
 
