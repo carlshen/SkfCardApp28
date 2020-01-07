@@ -8,9 +8,9 @@
 
 2 Android Studio 3.2.0(以上);
 
-3 Android sdk 28;(ndk没有使用);
+3 Android SDK 28;(NDK没有使用);
 
-4 目前SDK支持21个接口，第一种方案使用异步回调的方式:
+4 目前SDK支持23个接口，第一种方案使用异步回调的方式:
 
   在调用所有接口前，请先调用SkfInterface.getSkfInstance().SkfCallback(SkfCallback)设置回调接口，否则将不会收到任何反馈；
 
@@ -154,6 +154,22 @@
 
 	 返回Json格式的字符串，code: 0表示验证签名成功，其它表示验证签名失败；
 
+ 22）写入密码：SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+
+     传入枚举设备获得的"device"，以及密码；
+
+     回调函数onSetPIN(String result)；
+
+	 返回Json格式的字符串，code: 0表示成功，其它表示失败；
+
+ 23）读取密码：SkfInterface.getSkfInstance().SKF_GetPIN(String device);
+
+     传入枚举设备获得的"device"；
+
+     回调函数onGetPIN(String result)；
+
+	 返回Json格式的字符串，code: 0表示成功, "data": "xxxxxx"中是返回的密码值；其它表示失败；
+
 
   返回的结果String result是Json格式的，这样能提供更详细的信息，具体格式如下：
 
@@ -182,7 +198,7 @@
 	通过SkfInterface.getSkfInstance().setDebugFlag(true/false)可以控制是否打印SDK的日志，用于调试。
 
 
-5 目前SDK支持21个接口，第二种方案主要使用同步调用的方式；只有SKF_EnumDev这个接口需要枚举设备及初始化，需要异步；SKF_EncryptFile和SKF_DecryptFile如果文件比较大，耗时比较长，需要异步:
+5 目前SDK支持23个接口，第二种方案主要使用同步调用的方式；只有SKF_EnumDev这个接口需要枚举设备及初始化，需要异步；SKF_EncryptFile和SKF_DecryptFile如果文件比较大，耗时比较长，需要异步:
 
   在调用所有接口前，请先调用SkfSyncInterface.getSkfSyncInstance().SKF_SetSyncCallback(SkfSyncCallback)设置回调接口，否则将不能枚举设备，初始化；
 
@@ -290,11 +306,23 @@
 
 	 返回Json格式的字符串，code: 0表示验证签名成功，其它表示验证签名失败；
 
+ 22）写入密码：String result = SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+
+     传入枚举设备获得的"device"，以及密码；
+
+	 返回Json格式的字符串，code: 0表示成功，其它表示失败；
+
+ 23）读取密码：String result = SkfInterface.getSkfInstance().SKF_GetPIN(String device);
+
+     传入枚举设备获得的"device"；
+
+	 返回Json格式的字符串，code: 0表示成功, "data": "xxxxxx"中是返回的密码值；其它表示失败；
+
 
   返回的结果String result是Json格式的，详细的解释参考前面。
 
 
-6 本sdk是CardEmulation-1.3.0.aar文件，请在项目里建立libs目录，把文件CardEmulation-1.3.0.aar放在libs目录下面;
+6 本SKF SDK是CardEmulation-1.4.0.aar文件，请在项目里建立libs目录，把文件CardEmulation-1.4.0.aar放在libs目录下面;
 
   并且在编译文件build.gradle中加入下面的脚本：  
 
@@ -310,11 +338,11 @@ repositories {
 
 dependencies {
 
-    compile (name:'CardEmulation-1.3.0', ext:'aar')
+    compile (name:'CardEmulation-1.4.0', ext:'aar')
 
 }
 
-7 请参考本sdk使用的例子项目： https://github.com/carlshen/SkfCardApp28
+7 请参考本SDK使用的例子项目： https://github.com/carlshen/SkfCardApp28
 
     EncryptUtil.java文件中有生成密钥的函数，具体调用请参考例子中的代码。
 

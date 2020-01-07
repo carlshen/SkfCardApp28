@@ -8,9 +8,9 @@ Next is the develop environment:
 
 2 Android Studio 3.2.0(above);
 
-3 Android sdk 28;(ndk not used);
+3 Android SDK 28;(NDK not used);
 
-4 Current SDK supportted 21 interfaces. The first solution uses asynchronous callback:
+4 Current SDK supportted 23 interfaces. The first solution uses asynchronous callback:
 
   Please use SkfInterface.getSkfInstance().SKF_SetCallback(SkfCallback) to set the Callback before you call any function, otherwise you can't get any feedback;  
 
@@ -172,6 +172,22 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is verify ok, other value is verify fail.
 
+ 22）SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+
+     input device parameter "device", pin parameter Key;
+
+     Callback function is onSetPIN(String result);
+
+	 return Json format string, code: 0 is ok, other value is fail.
+
+ 23）SkfInterface.getSkfInstance().SKF_GetPIN(String device);
+
+     input device parameter "device";
+
+     Callback function is onGetPIN(String result);
+
+	 return Json format string, code: 0 is ok, "data": "xxxxxx" is the pin; other value is fail.
+
 
   The String result is Json format, which will provide more information, such as: 
 
@@ -200,7 +216,7 @@ Next is the develop environment:
 	SkfInterface.getSkfInstance().setDebugFlag(true/false) can set SDK log flag, which is usefule for debug.
 
 
-5 Current SDK supportted 21 interfaces. The second solution mainly uses synchronous callback, while SKF_EnumDev/SKF_EncryptFile/SKF_DecryptFile need asynchronous callback:
+5 Current SDK supportted 23 interfaces. The second solution mainly uses synchronous callback, while SKF_EnumDev/SKF_EncryptFile/SKF_DecryptFile need asynchronous callback:
 
   Please use SkfSyncInterface.getSkfSyncInstance().SKF_SetSyncCallback(SkfSyncCallback) to set the Callback, otherwise you can't enum the device for the following steps;  
 
@@ -328,15 +344,27 @@ Next is the develop environment:
 
     Note: The return result is Json format string, please refer former explaination for detail.
 
+ 22）String result = SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
 
-6 Sdk is CardEmulation-1.3.0.aar file, please create libs directory in project, and place the CardEmulation-1.3.0.aar library in the libs directory;
+     input device parameter "device", pin parameter Key;
+
+	 return Json format string, code: 0 is ok, other value is fail.
+
+ 23）String result = SkfInterface.getSkfInstance().SKF_GetPIN(String device);
+
+     input device parameter "device";
+
+	 return Json format string, code: 0 is ok, "data": "xxxxxx" is the pin; other value is fail.
+
+
+6 SKF Sdk is CardEmulation-1.4.0.aar file, please create libs directory in project, and place the CardEmulation-1.4.0.aar library in the libs directory;
 
   Add next in project build.gradle file: 
 
 repositories {
 
     flatDir {
-	
+
         dirs 'libs'
 
     }
@@ -345,7 +373,7 @@ repositories {
 
 dependencies {
 
-    compile (name:'CardEmulation-1.3.0', ext:'aar')
+    compile (name:'CardEmulation-1.4.0', ext:'aar')
 
 }
 

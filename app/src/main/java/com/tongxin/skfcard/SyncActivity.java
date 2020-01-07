@@ -52,6 +52,8 @@ public class SyncActivity extends AppCompatActivity {
     private Button mECCKey = null;
     private Button mECCSign = null;
     private Button mECCVerify = null;
+    private Button mSetPin = null;
+    private Button mGetPin = null;
     private String mECCData = null;
     private String ECCKeyPair = null;
     private TextView tvResult = null;
@@ -527,6 +529,48 @@ public class SyncActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 tvResult.setText("onECCVerify: " + deviceData);
+            }
+        });
+        mSetPin = (Button) findViewById(R.id.btn_setpin);
+        mSetPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetPIN(deviceName, "112233445566778899001122334455667788990011223344556677889900112233445566");
+                try {
+                    JSONObject json = new JSONObject(result);
+                    if (json != null) {
+                        int code = json.optInt("code");
+                        String tip = json.optString("tips");
+                        deviceData = json.optString("data");
+                        Log.i(TAG, "SKF_SetPIN code = " + code);
+                        Log.i(TAG, "SKF_SetPIN tip = " + tip);
+                        Log.i(TAG, "SKF_SetPIN data = " + deviceData);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                tvResult.setText("SKF_SetPIN: " + deviceData);
+            }
+        });
+        mGetPin = (Button) findViewById(R.id.btn_getpin);
+        mGetPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_GetPIN(deviceName);
+                try {
+                    JSONObject json = new JSONObject(result);
+                    if (json != null) {
+                        int code = json.optInt("code");
+                        String tip = json.optString("tips");
+                        deviceData = json.optString("data");
+                        Log.i(TAG, "SKF_GetPIN code = " + code);
+                        Log.i(TAG, "SKF_GetPIN tip = " + tip);
+                        Log.i(TAG, "SKF_GetPIN data = " + deviceData);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                tvResult.setText("SKF_GetPIN: " + deviceData);
             }
         });
         SyncCallback = new SkfSyncCallback() {
