@@ -1,10 +1,10 @@
 # SkfCardApp28
 
-This is the SKF SIM card application to example the SKF SDK library.
+This is the example application for SKF SIM card SDK library.
 
 Next is the develop environment:
 
-1 java jdk8;
+1 Java JDK8;
 
 2 Android Studio 3.2.0(above);
 
@@ -56,7 +56,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
-  8）SkfInterface.getSkfInstance().SKF_SetSymmKey(String device, String key, int AlgID)； // set encrypt key and algorithm;
+  8）SkfInterface.getSkfInstance().SKF_SetSymmKey(String device, byte[] key, int AlgID)； // set encrypt key and algorithm;
 
      input device parameter "device", encrypt key parameter "key"(128bit, or 16 bytes string), algorithm parameter "AlgID"(1025 is ECB algorithm， 1026 is CBC algorithm, others not supported);
 
@@ -88,7 +88,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
- 12）SkfInterface.getSkfInstance().SKF_Encrypt(String key, String data)；  // encrypt data
+ 12）SkfInterface.getSkfInstance().SKF_Encrypt(String key, byte[] data)；  // encrypt data
 
      input encrypt key parameter "key"(128bit, or 16 bytes string), encrypt data;
   
@@ -104,7 +104,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
- 14）SkfInterface.getSkfInstance().SKF_Decrypt(String key, String data)； // decrypt data
+ 14）SkfInterface.getSkfInstance().SKF_Decrypt(String key, byte[] data)； // decrypt data
 
      input decrypt key parameter "key"(128bit, or 16 bytes string), decrypt data;
   
@@ -140,7 +140,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok.
 
- 18）SkfInterface.getSkfInstance().SKF_Digest(String data);
+ 18）SkfInterface.getSkfInstance().SKF_Digest(byte[] data);
 
      input device parameter "device", the digest data;
 
@@ -156,7 +156,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the 64 byte public Key.
 
- 20）SkfInterface.getSkfInstance().SKF_ECCSignData(String key, String data);
+ 20）SkfInterface.getSkfInstance().SKF_ECCSignData(String key, byte[] data);
 
      input key parameter "key" from 18), and the signature data;
 
@@ -164,7 +164,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the signature data result.
 
- 21）SkfInterface.getSkfInstance().SKF_ECCVerify(String key, String sign, String data);
+ 21）SkfInterface.getSkfInstance().SKF_ECCVerify(String key, String sign, byte[] data);
 
      input parameter Key, signature from above, and the verify data;
 
@@ -172,7 +172,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is verify ok, other value is verify fail.
 
- 22）SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+ 22）SkfInterface.getSkfInstance().SKF_SetPIN(String device, byte[] key);
 
      input device parameter "device", pin parameter Key;
 
@@ -250,7 +250,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
-  8）String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(String device, String key, int AlgID)； // set encrypt key and algorithm;
+  8）String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(String device, byte[] key, int AlgID)； // set encrypt key and algorithm;
 
      input device parameter "device", encrypt key parameter "key"(128bit, or 16 bytes string), algorithm parameter "AlgID"(1025 is ECB algorithm， 1026 is CBC algorithm, others not supported);
 	 
@@ -274,7 +274,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
- 12）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(String key, String data)；  // encrypt data
+ 12）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(String key, byte[] data)；  // encrypt data
 
      input encrypt key parameter "key"(128bit, or 16 bytes string), encrypt data;
 
@@ -286,7 +286,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; other value is failure；
 
- 14）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(String key, String data)； // decrypt data
+ 14）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(String key, byte[] data)； // decrypt data
 
      input decrypt key parameter "key"(128bit, or 16 bytes string), decrypt data;
 
@@ -318,7 +318,7 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok.
 
- 18）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(String data);
+ 18）String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(byte[] data);
 
      input device parameter "device", the digest data;
 
@@ -330,13 +330,13 @@ Next is the develop environment:
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the 64 byte public Key.
 
- 20）String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(String key, String data);
+ 20）String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(String key, byte[] data);
 
      input key parameter "key" from 18), and the signature data;
 
 	 return Json format string, code: 0 is ok; data："xxxx" is the signature data result.
 
- 21）String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(String key, String sign, String data);
+ 21）String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(String key, String sign, byte[] data);
 
      input parameter Key, signature from above, and the verify data;
 
@@ -344,7 +344,7 @@ Next is the develop environment:
 
     Note: The return result is Json format string, please refer former explaination for detail.
 
- 22）String result = SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+ 22）String result = SkfInterface.getSkfInstance().SKF_SetPIN(String device, byte[] key);
 
      input device parameter "device", pin parameter Key;
 
@@ -357,7 +357,7 @@ Next is the develop environment:
 	 return Json format string, code: 0 is ok, "data": "xxxxxx" is the pin; other value is fail.
 
 
-6 SKF Sdk is CardEmulation-1.4.0.aar file, please create libs directory in project, and place the CardEmulation-1.4.0.aar library in the libs directory;
+6 SKF Sdk is CardEmulation-1.5.0.aar file, please create libs directory in project, and place the CardEmulation-1.5.0.aar library in the libs directory;
 
   Add next in project build.gradle file: 
 
@@ -373,7 +373,7 @@ repositories {
 
 dependencies {
 
-    compile (name:'CardEmulation-1.4.0', ext:'aar')
+    compile (name:'CardEmulation-1.5.0', ext:'aar')
 
 }
 

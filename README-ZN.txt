@@ -4,7 +4,7 @@
 
 开发环境：
 
-1 java jdk8;
+1 Java JDK8;
 
 2 Android Studio 3.2.0(以上);
 
@@ -42,7 +42,7 @@
   
      回调函数onCreateContainer(String result);
 	 
-  8）导入会话密钥：SkfInterface.getSkfInstance().SKF_SetSymmKey(String device, String key, int AlgID)； 
+  8）导入会话密钥：SkfInterface.getSkfInstance().SKF_SetSymmKey(String device, byte[] key, int AlgID)；
 
      传入枚举设备获得的"device"；密钥key(128bit，即16字节长度的字符串)；算法AlgID(1025表示ECB算法，1026表示CBC算法，其它暂时不支持);
 
@@ -72,7 +72,7 @@
 
      回调函数onEncryptInit(String result);
 
- 12）单组数据加密：SkfInterface.getSkfInstance().SKF_Encrypt(String key, String data)；
+ 12）单组数据加密：SkfInterface.getSkfInstance().SKF_Encrypt(String key, byte[] data)；
 
      传入密钥的句柄"key"；要加密的数据data；
   
@@ -86,7 +86,7 @@
 
      回调函数onDecryptInit(String result);
 
- 14）单组数据解密：SkfInterface.getSkfInstance().SKF_Decrypt(String key, String data)；
+ 14）单组数据解密：SkfInterface.getSkfInstance().SKF_Decrypt(String key, byte[] data)；
 
      传入密钥的句柄"key"；要解密的数据data；
   
@@ -122,7 +122,7 @@
 
 	 返回Json格式的字符串，code: 0表示成功；
 
- 18）单组数据密码杂凑，支持SM3：SkfInterface.getSkfInstance().SKF_Digest(String data)；
+ 18）单组数据密码杂凑，支持SM3：SkfInterface.getSkfInstance().SKF_Digest(byte[] data)；
 
      传入枚举设备获得的"device"，需要摘要的数据;
 
@@ -138,7 +138,7 @@
 
 	 返回Json格式的字符串，code: 0表示成功，data："xxxx"中是64字节公钥值；
 
- 20）ECC签名，支持SM2：SkfInterface.getSkfInstance().SKF_ECCSignData(String key, String data)；
+ 20）ECC签名，支持SM2：SkfInterface.getSkfInstance().SKF_ECCSignData(String key, byte[] data)；
 
      传入上面获得的公钥值，需要签名的数据;
 
@@ -146,7 +146,7 @@
 
 	 返回Json格式的字符串，code: 0表示成功，data："xxxx"中是数据的64字节签名值；
 
- 21）ECC验签，支持SM2：SkfInterface.getSkfInstance().SKF_ECCVerify(String key, String sign, String data)；
+ 21）ECC验签，支持SM2：SkfInterface.getSkfInstance().SKF_ECCVerify(String key, String sign, byte[] data)；
 
      传入上面获得的公钥值，签名值，需要验证签名的数据;
 
@@ -154,7 +154,7 @@
 
 	 返回Json格式的字符串，code: 0表示验证签名成功，其它表示验证签名失败；
 
- 22）写入密码：SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+ 22）写入密码：SkfInterface.getSkfInstance().SKF_SetPIN(String device, byte[] key);
 
      传入枚举设备获得的"device"，以及密码；
 
@@ -218,7 +218,7 @@
 
   7）创建容器：String result = SkfSyncInterface.getSkfSyncInstance().SKF_CreateContainer("device")； // 暂时可以不调用，缺省已经创建
 	 
-  8）导入会话密钥：String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(String device, String key, int AlgID)； 
+  8）导入会话密钥：String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(String device, byte[] key, int AlgID)；
 
      传入枚举设备获得的"device"；密钥key(128bit，即16字节长度的字符串)；算法AlgID(1025表示ECB算法，1026表示CBC算法，其它暂时不支持);
 
@@ -240,7 +240,7 @@
 
      传入密钥的句柄"key"；
 
- 12）单组数据加密：String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(String key, String data)；
+ 12）单组数据加密：String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(String key, byte[] data)；
 
      传入密钥的句柄"key"；要加密的数据data；
 
@@ -250,7 +250,7 @@
 
      传入密钥的句柄"key"；
 
- 14）单组数据解密：String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(String key, String data)；
+ 14）单组数据解密：String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(String key, byte[] data)；
 
      传入密钥的句柄"key"；要解密的数据data；
 
@@ -282,7 +282,7 @@
 
 	 返回Json格式的字符串，code: 0表示成功；
 
- 18）单组数据密码杂凑，支持SM3：String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(String data)；
+ 18）单组数据密码杂凑，支持SM3：String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(byte[] data)；
 
      传入枚举设备获得的"device"，需要摘要的数据;
 
@@ -294,19 +294,19 @@
 
 	 返回Json格式的字符串，code: 0表示成功，data："xxxx"中是64字节公钥值；
 
- 20）ECC签名，支持SM2：String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(String key, String data)；
+ 20）ECC签名，支持SM2：String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(String key, byte[] data)；
 
      传入上面获得的公钥值，需要签名的数据;
 
 	 返回Json格式的字符串，code: 0表示成功，data："xxxx"中是数据的64字节签名值；
 
- 21）ECC验签，支持SM2：String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(String key, String sign, String data)；
+ 21）ECC验签，支持SM2：String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(String key, String sign, byte[] data)；
 
      传入上面获得的公钥值，签名值，需要验证签名的数据;
 
 	 返回Json格式的字符串，code: 0表示验证签名成功，其它表示验证签名失败；
 
- 22）写入密码：String result = SkfInterface.getSkfInstance().SKF_SetPIN(String device, String key);
+ 22）写入密码：String result = SkfInterface.getSkfInstance().SKF_SetPIN(String device, byte[] key);
 
      传入枚举设备获得的"device"，以及密码；
 
@@ -322,7 +322,7 @@
   返回的结果String result是Json格式的，详细的解释参考前面。
 
 
-6 本SKF SDK是CardEmulation-1.4.0.aar文件，请在项目里建立libs目录，把文件CardEmulation-1.4.0.aar放在libs目录下面;
+6 本SKF SDK是CardEmulation-1.5.0.aar文件，请在项目里建立libs目录，把文件CardEmulation-1.5.0.aar放在libs目录下面;
 
   并且在编译文件build.gradle中加入下面的脚本：  
 
@@ -338,7 +338,7 @@ repositories {
 
 dependencies {
 
-    compile (name:'CardEmulation-1.4.0', ext:'aar')
+    compile (name:'CardEmulation-1.5.0', ext:'aar')
 
 }
 

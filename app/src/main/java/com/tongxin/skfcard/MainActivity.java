@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,15 +140,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String symKey = "";
+                byte[] key = null;
                 try {
-                    byte[] key = EncryptUtil.generateKey();
+                    key = EncryptUtil.generateKey();
                     symKey = EncryptUtil.ByteArrayToHexString(key);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    symKey = "11223344556677881122334455667788";
                 }
                 Log.i(TAG, "====== mSetSymKey = " + symKey);
-                boolean result = SkfInterface.getSkfInstance().SKF_SetSymmKey(deviceName, symKey, 1025);
+                boolean result = SkfInterface.getSkfInstance().SKF_SetSymmKey(deviceName, key, 1025);
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });
@@ -187,12 +188,12 @@ public class MainActivity extends AppCompatActivity {
         mEncrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder encbuilder = new StringBuilder(2048);
+                StringBuilder encbuilder = new StringBuilder(1024);
                 for (int i = 0; i < 28; i++) {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                boolean result = SkfInterface.getSkfInstance().SKF_Encrypt(KeyData, EncrpytData);
+                boolean result = SkfInterface.getSkfInstance().SKF_Encrypt(KeyData, EncryptUtil.HexStringToByteArray(EncrpytData));
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });
@@ -208,8 +209,11 @@ public class MainActivity extends AppCompatActivity {
         mDecrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean result = SkfInterface.getSkfInstance().SKF_Decrypt(KeyData, DecrpytData);
-//                tvResult.setText("DisconnectDev: " + result);
+                if (TextUtils.isEmpty(DecrpytData)) {
+                    tvResult.setText("SKF_Decrypt: There is no decrypt data");
+                    return;
+                }
+                boolean result = SkfInterface.getSkfInstance().SKF_Decrypt(KeyData, EncryptUtil.HexStringToByteArray(DecrpytData));
             }
         });
         mEncryptFile = (Button) findViewById(R.id.btn_encrfile);
@@ -263,12 +267,12 @@ public class MainActivity extends AppCompatActivity {
         mDigest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder encbuilder = new StringBuilder(2048);
+                StringBuilder encbuilder = new StringBuilder(1024);
                 for (int i = 0; i < 28; i++) {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                boolean result = SkfInterface.getSkfInstance().SKF_Digest(EncrpytData);
+                boolean result = SkfInterface.getSkfInstance().SKF_Digest(EncryptUtil.HexStringToByteArray(EncrpytData));
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });
@@ -289,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                boolean result = SkfInterface.getSkfInstance().SKF_ECCSignData(ECCKeyPair, EncrpytData);
+                boolean result = SkfInterface.getSkfInstance().SKF_ECCSignData(ECCKeyPair, EncryptUtil.HexStringToByteArray(EncrpytData));
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });
@@ -302,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                boolean result = SkfInterface.getSkfInstance().SKF_ECCVerify(ECCKeyPair, mECCData, EncrpytData);
+                boolean result = SkfInterface.getSkfInstance().SKF_ECCVerify(ECCKeyPair, mECCData, EncryptUtil.HexStringToByteArray(EncrpytData));
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });
@@ -310,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         mSetPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean result = SkfInterface.getSkfInstance().SKF_SetPIN(deviceName, "112233445566778899001122334455667788990011223344556677889900112233445566");
+                boolean result = SkfInterface.getSkfInstance().SKF_SetPIN(deviceName, EncryptUtil.HexStringToByteArray("112233445566778899001122334455667788990011223344556677889900112233445566"));
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });

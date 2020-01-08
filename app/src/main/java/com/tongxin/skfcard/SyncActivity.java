@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -216,15 +217,15 @@ public class SyncActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String symKey = "";
+                byte[] key = null;
                 try {
-                    byte[] key = EncryptUtil.generateKey();
+                    key = EncryptUtil.generateKey();
                     symKey = EncryptUtil.ByteArrayToHexString(key);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    symKey = "11223344556677881122334455667788";
                 }
                 Log.i(TAG, "====== mSetSymKey = " + symKey);
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(deviceName, symKey, 1025);
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetSymmKey(deviceName, key, 1025);
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
@@ -308,12 +309,12 @@ public class SyncActivity extends AppCompatActivity {
         mEncrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder encbuilder = new StringBuilder(2048);
+                StringBuilder encbuilder = new StringBuilder(1024);
                 for (int i = 0; i < 28; i++) {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(KeyData, EncrpytData);
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_Encrypt(KeyData, EncryptUtil.HexStringToByteArray(EncrpytData));
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
@@ -355,7 +356,11 @@ public class SyncActivity extends AppCompatActivity {
         mDecrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(KeyData, DecrpytData);
+                if (TextUtils.isEmpty(DecrpytData)) {
+                    tvResult.setText("SKF_Decrypt: There is no decrypt data");
+                    return;
+                }
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_Decrypt(KeyData, EncryptUtil.HexStringToByteArray(DecrpytData));
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
@@ -436,12 +441,12 @@ public class SyncActivity extends AppCompatActivity {
         mDigest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder encbuilder = new StringBuilder(2048);
+                StringBuilder encbuilder = new StringBuilder(1024);
                 for (int i = 0; i < 28; i++) {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(EncrpytData);
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_Digest(EncryptUtil.HexStringToByteArray(EncrpytData));
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
@@ -488,7 +493,7 @@ public class SyncActivity extends AppCompatActivity {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(ECCKeyPair, EncrpytData);
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCSignData(ECCKeyPair, EncryptUtil.HexStringToByteArray(EncrpytData));
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
@@ -514,7 +519,7 @@ public class SyncActivity extends AppCompatActivity {
                     encbuilder.append("1122334455667788990011223344556677889900");
                 }
                 EncrpytData = encbuilder.toString();
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(ECCKeyPair, mECCData, EncrpytData);
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_ECCVerify(ECCKeyPair, mECCData, EncryptUtil.HexStringToByteArray(EncrpytData));
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
@@ -535,7 +540,7 @@ public class SyncActivity extends AppCompatActivity {
         mSetPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetPIN(deviceName, "112233445566778899001122334455667788990011223344556677889900112233445566");
+                String result = SkfSyncInterface.getSkfSyncInstance().SKF_SetPIN(deviceName, EncryptUtil.HexStringToByteArray("112233445566778899001122334455667788990011223344556677889900112233445566"));
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
