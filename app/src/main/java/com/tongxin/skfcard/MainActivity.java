@@ -190,10 +190,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 StringBuilder encbuilder = new StringBuilder(1024);
                 for (int i = 0; i < 28; i++) {
-                    encbuilder.append("1122334455667788990011223344556677889900");
+                    encbuilder.append("112233445566778899001122334455667788aabb");
                 }
                 EncrpytData = encbuilder.toString();
-                boolean result = SkfInterface.getSkfInstance().SKF_Encrypt(KeyData, EncryptUtil.HexStringToByteArray(EncrpytData));
+                boolean result = SkfInterface.getSkfInstance().SKF_Encrypt(KeyData, EncrpytData.getBytes());
 //                tvResult.setText("DisconnectDev: " + result);
             }
         });
@@ -328,418 +328,116 @@ public class MainActivity extends AppCompatActivity {
         });
         Callback = new SkfCallback() {
             @Override
-            public void onEnumDev(String result) {
-                Log.i(TAG, "onEnumDev result = " + result);
+            public void onSkfCallback(String result) {
+                int tip = 0;
+                String data = null;
                 try {
                     JSONObject json = new JSONObject(result);
                     if (json != null) {
                         int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceName = json.optString("data");
-                        Log.i(TAG, "onEnumDev code = " + code);
-                        Log.i(TAG, "onEnumDev tip = " + tip);
-                        Log.i(TAG, "onEnumDev data = " + deviceName);
+                        tip = json.optInt("tips");
+                        data = json.optString("data");
+                        Log.i(TAG, "onSkfCallback code = " + code);
+                        Log.i(TAG, "onSkfCallback tip = " + tip);
+                        Log.i(TAG, "onSkfCallback data = " + data);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                tvResult.setText("Device: " + deviceName);
-            }
-
-            @Override
-            public void onConnectDev(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onConnectDev code = " + code);
-                        Log.i(TAG, "onConnectDev tip = " + tip);
-                        Log.i(TAG, "onConnectDev data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                switch (tip) {
+                    case 1:
+                        deviceName = data;
+                        tvResult.setText("EnumDev: " + deviceName);
+                        break;
+                    case 2:
+                        deviceData = data;
+                        tvResult.setText("ConnectDev: " + deviceData);
+                        break;
+                    case 3:
+                        deviceData = data;
+                        tvResult.setText("GetDevInfo: " + deviceData);
+                        break;
+                    case 4:
+                        deviceData = data;
+                        tvResult.setText("DisconnectDev: " + deviceData);
+                        break;
+                    case 5:
+                        deviceData = data;
+                        tvResult.setText("CreateApplication: " + deviceData);
+                        break;
+                    case 6:
+                        deviceData = data;
+                        tvResult.setText("OpenApplication: " + deviceData);
+                        break;
+                    case 7:
+                        deviceData = data;
+                        tvResult.setText("CreateContainer: " + deviceData);
+                        break;
+                    case 8:
+                        KeyData = data;
+                        tvResult.setText("SetSymmKey: " + KeyData);
+                        break;
+                    case 9:
+                        deviceData = data;
+                        tvResult.setText("GetSymmKey: " + deviceData);
+                        break;
+                    case 10:
+                        deviceData = data;
+                        tvResult.setText("CheckSymmKey: " + deviceData);
+                        break;
+                    case 11:
+                        deviceData = data;
+                        tvResult.setText("onEncryptInit: " + deviceData);
+                        break;
+                    case 12:
+                        DecrpytData = data;
+                        tvResult.setText("encryptData: " + DecrpytData);
+                        break;
+                    case 13:
+                        deviceData = data;
+                        tvResult.setText("onDecryptInit: " + deviceData);
+                        break;
+                    case 14:
+                        deviceData = data;
+                        tvResult.setText("onDecrypt data: " + deviceData);
+                        break;
+                    case 15:
+                        deviceData = data;
+                        tvResult.setText("onEncryptFile: " + deviceData);
+                        break;
+                    case 16:
+                        deviceData = data;
+                        tvResult.setText("onDecryptFile: " + deviceData);
+                        break;
+                    case 17:
+                        deviceData = data;
+                        tvResult.setText("onDigestInit: " + deviceData);
+                        break;
+                    case 18:
+                        deviceData = data;
+                        tvResult.setText("onDigest data: " + deviceData);
+                        break;
+                    case 19:
+                        ECCKeyPair = data;
+                        tvResult.setText("onGenECCKeyPair key: " + ECCKeyPair);
+                        break;
+                    case 20:
+                        mECCData = data;
+                        tvResult.setText("onECCSignData data: " + mECCData);
+                        break;
+                    case 21:
+                        deviceData = data;
+                        tvResult.setText("onECCVerify: " + deviceData);
+                        break;
+                    case 22:
+                        deviceData = data;
+                        tvResult.setText("onSetPIN: " + deviceData);
+                        break;
+                    case 23:
+                        deviceData = data;
+                        tvResult.setText("onGetPIN: " + deviceData);
+                        break;
                 }
-                tvResult.setText("Device: " + deviceData);
-            }
-
-            @Override
-            public void onDisconnectDev(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onDisconnectDev code = " + code);
-                        Log.i(TAG, "onDisconnectDev tip = " + tip);
-                        Log.i(TAG, "onDisconnectDev data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("Device: " + deviceData);
-            }
-
-            @Override
-            public void onGetDevInfo(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onGetDevInfo code = " + code);
-                        Log.i(TAG, "onGetDevInfo tip = " + tip);
-                        Log.i(TAG, "onGetDevInfo data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("Device: " + deviceData);
-            }
-
-            @Override
-            public void onCreateApplication(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onCreateApplication code = " + code);
-                        Log.i(TAG, "onCreateApplication tip = " + tip);
-                        Log.i(TAG, "onCreateApplication data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("Device: " + deviceData);
-            }
-
-            @Override
-            public void onOpenApplication(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onOpenApplication code = " + code);
-                        Log.i(TAG, "onOpenApplication tip = " + tip);
-                        Log.i(TAG, "onOpenApplication data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("Device: " + deviceData);
-            }
-
-            @Override
-            public void onCreateContainer(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onCreateContainer code = " + code);
-                        Log.i(TAG, "onCreateContainer tip = " + tip);
-                        Log.i(TAG, "onCreateContainer data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("Device: " + deviceData);
-            }
-
-            @Override
-            public void onSetSymmKey(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        KeyData = json.optString("data");
-                        Log.i(TAG, "onSetSymmKey code = " + code);
-                        Log.i(TAG, "onSetSymmKey tip = " + tip);
-                        Log.i(TAG, "onSetSymmKey KeyData = " + KeyData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("KeyData: " + KeyData);
-            }
-
-            @Override
-            public void onCheckSymmKey(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onCheckSymmKey code = " + code);
-                        Log.i(TAG, "onCheckSymmKey tip = " + tip);
-                        Log.i(TAG, "onCheckSymmKey Data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("CheckSymmKey: " + deviceData);
-            }
-
-            @Override
-            public void onGetSymmKey(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        KeyData = json.optString("data");
-                        Log.i(TAG, "onGetSymmKey code = " + code);
-                        Log.i(TAG, "onGetSymmKey tip = " + tip);
-                        Log.i(TAG, "onGetSymmKey KeyData = " + KeyData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("KeyData: " + KeyData);
-            }
-
-            @Override
-            public void onEncryptInit(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onEncryptInit code = " + code);
-                        Log.i(TAG, "onEncryptInit tip = " + tip);
-                        Log.i(TAG, "onEncryptInit data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onEncryptInit: " + deviceData);
-            }
-
-            @Override
-            public void onEncrypt(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        DecrpytData = json.optString("data");
-                        Log.i(TAG, "onEncrypt code = " + code);
-                        Log.i(TAG, "onEncrypt tip = " + tip);
-                        Log.i(TAG, "onEncrypt data = " + DecrpytData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("encrpytedData: " + DecrpytData);
-            }
-
-            @Override
-            public void onEncryptFile(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onEncryptFile code = " + code);
-                        Log.i(TAG, "onEncryptFile tip = " + tip);
-                        Log.i(TAG, "onEncryptFile data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onEncryptFile: " + deviceData);
-            }
-
-            @Override
-            public void onDecryptInit(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onDecryptInit code = " + code);
-                        Log.i(TAG, "onDecryptInit tip = " + tip);
-                        Log.i(TAG, "onDecryptInit data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onDecryptInit: " + deviceData);
-            }
-
-            @Override
-            public void onDecrypt(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onDecrypt code = " + code);
-                        Log.i(TAG, "onDecrypt tip = " + tip);
-                        Log.i(TAG, "onDecrypt data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onDecrypt data: " + deviceData);
-            }
-
-            @Override
-            public void onDecryptFile(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onDecryptFile code = " + code);
-                        Log.i(TAG, "onDecryptFile tip = " + tip);
-                        Log.i(TAG, "onDecryptFile data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onDecryptFile: " + deviceData);
-            }
-
-            @Override
-            public void onDigestInit(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onDigestInit code = " + code);
-                        Log.i(TAG, "onDigestInit tip = " + tip);
-                        Log.i(TAG, "onDigestInit data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onDigestInit: " + deviceData);
-            }
-
-            @Override
-            public void onDigest(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onDigest code = " + code);
-                        Log.i(TAG, "onDigest tip = " + tip);
-                        Log.i(TAG, "onDigest data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onDigest data: " + deviceData);
-            }
-
-            @Override
-            public void onGenECCKeyPair(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        ECCKeyPair = json.optString("data");
-                        Log.i(TAG, "onGenECCKeyPair code = " + code);
-                        Log.i(TAG, "onGenECCKeyPair tip = " + tip);
-                        Log.i(TAG, "onGenECCKeyPair data = " + ECCKeyPair);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onGenECCKeyPair key: " + ECCKeyPair);
-            }
-
-            @Override
-            public void onECCSignData(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        mECCData = json.optString("data");
-                        Log.i(TAG, "onECCSignData code = " + code);
-                        Log.i(TAG, "onECCSignData tip = " + tip);
-                        Log.i(TAG, "onECCSignData data = " + mECCData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onECCSignData data: " + mECCData);
-            }
-
-            @Override
-            public void onECCVerify(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onECCVerify code = " + code);
-                        Log.i(TAG, "onECCVerify tip = " + tip);
-                        Log.i(TAG, "onECCVerify data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onECCVerify: " + deviceData);
-            }
-
-            @Override
-            public void onSetPIN(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onSetPIN code = " + code);
-                        Log.i(TAG, "onSetPIN tip = " + tip);
-                        Log.i(TAG, "onSetPIN data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onSetPIN: " + deviceData);
-            }
-
-            @Override
-            public void onGetPIN(String result) {
-                try {
-                    JSONObject json = new JSONObject(result);
-                    if (json != null) {
-                        int code = json.optInt("code");
-                        String tip = json.optString("tips");
-                        deviceData = json.optString("data");
-                        Log.i(TAG, "onGetPIN code = " + code);
-                        Log.i(TAG, "onGetPIN tip = " + tip);
-                        Log.i(TAG, "onGetPIN data = " + deviceData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                tvResult.setText("onGetPIN: " + deviceData);
             }
         };
         SkfInterface.getSkfInstance().SKF_SetCallback(Callback);
