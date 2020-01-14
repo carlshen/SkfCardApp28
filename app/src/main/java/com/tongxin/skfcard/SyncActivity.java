@@ -613,7 +613,12 @@ public class SyncActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                tvResult.setText("onEncryptFile: " + deviceData);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvResult.setText("onEncryptFile: " + deviceData);
+                    }
+                });
             }
 
             @Override
@@ -631,7 +636,35 @@ public class SyncActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                tvResult.setText("onDecryptFile: " + deviceData);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvResult.setText("onDecryptFile: " + deviceData);
+                    }
+                });
+            }
+
+            @Override
+            public void onProgressFile(String result) {
+                try {
+                    JSONObject json = new JSONObject(result);
+                    if (json != null) {
+                        int code = json.optInt("code");
+                        String tip = json.optString("tips");
+                        deviceData = json.optString("data");
+                        Log.i(TAG, "onProgressFile code = " + code);
+                        Log.i(TAG, "onProgressFile tip = " + tip);
+                        Log.i(TAG, "onProgressFile data = " + deviceData);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvResult.setText("onProgressFile: " + deviceData);
+                    }
+                });
             }
         };
         SkfSyncInterface.getSkfSyncInstance().SKF_SetSyncCallback(SyncCallback);
